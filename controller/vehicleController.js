@@ -8,7 +8,7 @@ vehicleController.use(express.json());
 vehicleController.get("/api/welcome", auth, (req,res)=>{
     res.status(200).json({message:"Welcome 🙌 "});
 })
-vehicleController.post("/api/type", auth, async (req, res)=>{
+vehicleController.post("/api/vehicle/type", auth, async (req, res)=>{
     try{
         const {name, parking_charge} = req.body;
         if(!(name, parking_charge)){
@@ -27,6 +27,21 @@ vehicleController.post("/api/type", auth, async (req, res)=>{
         });
     }catch (err){
 
+    }
+})
+vehicleController.get("/api/vehicle/type", auth, async (req, res)=>{
+    try {
+        await VehicleType.find({}).then((vehicleTypes) => {
+            if (vehicleTypes) {
+                console.log("Hello")
+                const data = vehicleTypes.map(doc => ({name: doc.name, parking_charge: doc.parking_charge}))
+                res.status(200).json({data});
+            } else {
+                console.log("Hello")
+            }
+        })
+    }catch (error){
+        console.log(error)
     }
 })
 
