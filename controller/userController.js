@@ -1,6 +1,6 @@
 const express = require("express");
 const User = require('../model/user');
-
+const auth = require("../middlewaare/auth");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const userController = express();
@@ -59,5 +59,16 @@ userController.post("/api/login", async (req, res)=>{
     }catch (err) {
         console.log(err)
     }
+})
+userController.get("/api/profile", auth, async (req, res)=>{
+    const user = req.user.user_id;
+    const logged_user = await User.findById(user);
+    const first_name = logged_user.first_name;
+    const last_name = logged_user.last_name;
+    res.json({data: {
+            first_name: first_name,
+            last_name: last_name,
+            email: logged_user.email,
+        }});
 })
 module.exports = userController;
