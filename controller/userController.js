@@ -71,4 +71,14 @@ userController.get("/api/profile", auth, async (req, res)=>{
             email: logged_user.email,
         }});
 })
+userController.get("/api/logout", auth,async  (req, res) => {
+    const authHeader = req.headers["x-access-token"];
+    jwt.sign(authHeader, "", {expiresIn: 60}, (logout, err)=>{
+        if (logout){
+            res.send({msg : 'You have  Logged Out' });
+        }else {
+            res.send({msg:'Error'});
+        }
+    });
+});
 module.exports = userController;
